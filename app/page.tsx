@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ArrowDown, ArrowUpRight, CalendarDays, Church, Clock3, Heart, MapPin, Sparkles } from 'lucide-react'
 
 const invitationArtwork = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-5VQ38nu3yH9SvxvxXGC4tPaUHawqcq.png'
@@ -18,6 +18,31 @@ const people = {
 
 export default function Page() {
   const [selectedPerson, setSelectedPerson] = useState<'bride' | 'groom' | null>(null)
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 })
+
+  useEffect(() => {
+    const weddingDay = new Date('2026-12-04T10:30:00+05:30').getTime()
+    const updateCountdown = () => {
+      const distance = Math.max(0, weddingDay - Date.now())
+      setTimeLeft({
+        days: Math.floor(distance / 86400000),
+        hours: Math.floor((distance / 3600000) % 24),
+        minutes: Math.floor((distance / 60000) % 60),
+        seconds: Math.floor((distance / 1000) % 60),
+      })
+    }
+    updateCountdown()
+    const timer = window.setInterval(updateCountdown, 1000)
+    return () => window.clearInterval(timer)
+  }, [])
+
+  const countdownUnits = [
+    ['Days', timeLeft.days],
+    ['Hours', timeLeft.hours],
+    ['Minutes', timeLeft.minutes],
+    ['Seconds', timeLeft.seconds],
+  ]
+
   return (
     <main className="wedding-page">
       <section className="hero-editorial">
@@ -29,14 +54,14 @@ export default function Page() {
           <h1><span>Jaffrin</span><i>&amp;</i><span>Shifforah</span></h1>
           <p className="hero-intro">invite you to witness the beginning of their forever, surrounded by faith, family, and the people they love.</p>
           <div className="hero-date"><span>FRI</span><strong>04</strong><span>DECEMBER</span><strong>26</strong></div>
-          <a href="#story" className="hero-scroll">Discover the invitation <ArrowDown /></a>
+          <div className="countdown" aria-label="Countdown to the wedding"><p>Counting down to our wedding day</p><div className="countdown-grid">{countdownUnits.map(([label, value]) => <div key={label}><strong>{String(value).padStart(2, '0')}</strong><span>{label}</span></div>)}</div></div><a href="#story" className="hero-scroll">Discover the invitation <ArrowDown /></a>
         </div>
       </section>
 
       <section id="story" className="story-section section-shell">
         <div className="section-heading"><p className="section-kicker">By grace, together</p><h2>Two hearts.<br /><em>One beautiful promise.</em></h2><p>We would be honored by your prayers and presence as we step into this new chapter of our lives.</p></div>
         <div className="people-editorial">
-          {(['bride', 'groom'] as const).map((person) => { const item = people[person]; const open = selectedPerson === person; return <button key={person} className={`person-editorial ${open ? 'is-open' : ''}`} onClick={() => setSelectedPerson(open ? null : person)} aria-expanded={open}><div className={`portrait-oval portrait-${person}`}><span>{item.initials}</span></div><div><p className="section-kicker">{item.role}</p><h3>{item.name}</h3><p className="person-detail">{open ? item.detail : 'Tap to discover their story'}</p>{open && <p className="person-note">{item.note}</p>}</div><ArrowDown className="person-chevron" /></button> })}
+          {(['groom', 'bride'] as const).map((person) => { const item = people[person]; const open = selectedPerson === person; return <button key={person} className={`person-editorial ${open ? 'is-open' : ''}`} onClick={() => setSelectedPerson(open ? null : person)} aria-expanded={open}><div className={`portrait-oval portrait-${person}`}><span>{item.initials}</span></div><div><p className="section-kicker">{item.role}</p><h3>{item.name}</h3><p className="person-detail">{open ? item.detail : 'Tap to discover their story'}</p>{open && <p className="person-note">{item.note}</p>}</div><ArrowDown className="person-chevron" /></button> })}
         </div>
         <div className="artwork-lockup"><p className="section-kicker">The invitation</p><img src={invitationArtwork} alt="Lavender floral wedding invitation with church and wedding details" /></div>
       </section>
