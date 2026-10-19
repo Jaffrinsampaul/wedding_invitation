@@ -31,8 +31,8 @@ const events = [
     title: 'Reception Gathering',
     date: 'Saturday, 05 December 2026',
     time: '6:30 in the evening',
-    venue: 'JD Scott Hall',
-    place: 'Nagercoil',
+    venue: 'JD Grand Hall Nazareth',
+    place: 'Nazareth',
     href: 'https://maps.app.goo.gl/3jPmWYQJ4yqT9J1SA',
     icon: Heart,
   },
@@ -60,10 +60,10 @@ export default function Page() {
 
   return (
     <main className="min-h-screen overflow-hidden bg-[#f7f1f5] text-[#40344b]">
-      <section className="relative isolate flex min-h-[92vh] items-center justify-center overflow-hidden bg-[#4d285c] px-6 py-20 text-center text-white">
+      <section className="hero-section relative isolate flex min-h-[92vh] items-center justify-center overflow-hidden bg-[#4d285c] px-6 py-20 text-center text-white">
         <div className="hero-glow absolute inset-0 opacity-80" />
         <div className="absolute inset-0 bg-[url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-5VQ38nu3yH9SvxvxXGC4tPaUHawqcq.png')] bg-cover bg-center opacity-10 mix-blend-screen" />
-        <div className="relative z-10 mx-auto max-w-4xl">
+        <div className="hero-content relative z-10 mx-auto max-w-4xl">
           <p className="mb-6 text-xs font-medium uppercase tracking-[0.38em] text-[#ebcce6]">With joyful hearts & grateful prayers</p>
           <div className="mx-auto mb-8 flex size-16 items-center justify-center rounded-full border border-[#dfb6d2]/60 bg-white/10 text-[#f1d8e8] shadow-2xl backdrop-blur-sm">
             <Heart className="size-7 fill-current" />
@@ -87,7 +87,7 @@ export default function Page() {
           <p className="mt-6 text-base leading-8 text-[#766a7a]">Every detail has been chosen with love. We would be honored to have your prayers and presence as we step into this beautiful chapter.</p>
         </div>
 
-        <div className="mx-auto mt-16 grid max-w-5xl gap-6 md:grid-cols-2">
+        <div className="mx-auto mt-16 grid max-w-5xl gap-6 md:grid-cols-2 reveal-group">
           {(['bride', 'groom'] as const).map((person) => {
             const item = people[person]
             const isSelected = selectedPerson === person
@@ -116,12 +116,12 @@ export default function Page() {
         <div className="mx-auto max-w-7xl">
           <div className="max-w-2xl"><p className="section-kicker">Save the dates</p><h2 className="mt-4 font-serif text-5xl text-[#4d285c] sm:text-6xl">Come celebrate with us</h2></div>
           <div className="mt-14 grid gap-5 lg:grid-cols-3">
-            {events.map((event) => { const Icon = event.icon; return <article key={event.title} className="event-card"><div className="flex items-start justify-between"><span className="event-icon"><Icon className="size-5" /></span><span className="text-xs font-semibold tracking-[0.2em] text-[#a076a2]">{event.date.split(',')[0]}</span></div><p className="mt-9 text-xs uppercase tracking-[0.2em] text-[#a076a2]">{event.eyebrow}</p><h3 className="mt-3 font-serif text-3xl text-[#4d285c]">{event.title}</h3><div className="mt-7 flex flex-col gap-3 text-sm text-[#766a7a]"><span className="flex items-center gap-3"><CalendarDays className="size-4 text-[#9b6596]" />{event.date}</span><span className="flex items-center gap-3"><Clock3 className="size-4 text-[#9b6596]" />{event.time}</span><span className="flex items-start gap-3"><MapPin className="mt-0.5 size-4 shrink-0 text-[#9b6596]" /><span>{event.venue}<br />{event.place}</span></span></div><a href={event.href} target="_blank" rel="noreferrer" className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-[#6b3f72] hover:text-[#4d285c]">View on map <ArrowUpRight className="size-4" /></a></article> })}
+            {events.map((event, index) => { const Icon = event.icon; return <article key={event.title} className="event-card" style={{ animationDelay: `${index * 120}ms` }}><div className="flex items-start justify-between"><span className="event-icon"><Icon className="size-5" /></span><span className="text-xs font-semibold tracking-[0.2em] text-[#a076a2]">{event.date.split(',')[0]}</span></div><p className="mt-9 text-xs uppercase tracking-[0.2em] text-[#a076a2]">{event.eyebrow}</p><h3 className="mt-3 font-serif text-3xl text-[#4d285c]">{event.title}</h3><div className="mt-7 flex flex-col gap-3 text-sm text-[#766a7a]"><span className="flex items-center gap-3"><CalendarDays className="size-4 text-[#9b6596]" />{event.date}</span><span className="flex items-center gap-3"><Clock3 className="size-4 text-[#9b6596]" />{event.time}</span><span className="flex items-start gap-3"><MapPin className="mt-0.5 size-4 shrink-0 text-[#9b6596]" /><span>{event.venue}<br />{event.place}</span></span></div><a href={event.href} target="_blank" rel="noreferrer" className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-[#6b3f72] hover:text-[#4d285c]">View on map <ArrowUpRight className="size-4" /></a></article> })}
           </div>
         </div>
       </section>
 
-      <footer className="bg-[#4d285c] px-6 py-20 text-center text-white"><Heart className="mx-auto size-6 fill-[#e1b4d2] text-[#e1b4d2]" /><p className="mt-6 font-serif text-4xl">Jaffrin & Shifforah</p><p className="mt-4 text-sm text-[#dfc8df]">04 December 2026 · A day to remember, a love to last forever</p><div className="mx-auto mt-10 h-px max-w-xs bg-white/20" /><p className="mt-8 text-xs uppercase tracking-[0.24em] text-[#c9a9c8]">With love and blessings</p></footer>
+      <footer className="footer-glow bg-[#4d285c] px-6 py-20 text-center text-white"><Heart className="mx-auto size-6 fill-[#e1b4d2] text-[#e1b4d2]" /><p className="mt-6 font-serif text-4xl">Jaffrin & Shifforah</p><p className="mt-4 text-sm text-[#dfc8df]">04 December 2026 · A day to remember, a love to last forever</p><div className="mx-auto mt-10 h-px max-w-xs bg-white/20" /><p className="mt-8 text-xs uppercase tracking-[0.24em] text-[#c9a9c8]">With love and blessings</p></footer>
     </main>
   )
 }
