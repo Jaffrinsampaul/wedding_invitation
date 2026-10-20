@@ -34,3 +34,393 @@
 @keyframes rise-in { from{opacity:0;transform:translateY(25px)} to{opacity:1;transform:none} } @keyframes twinkle { 0%,100%{opacity:.45;transform:translateX(-50%) scale(.8)} 50%{opacity:1;transform:translateX(-50%) scale(1.1)} } @keyframes pin-bounce { 0%,100%{transform:translate(-50%,-50%) rotate(-45deg)} 50%{transform:translate(-50%,-65%) rotate(-45deg)} }
 @media(max-width:760px) { .hero-editorial { min-height:700px; }.hero-flower { width:120vw; height:165px; }.hero-ornament { top:148px; }.hero-copy { padding-top:65px; }.hero-copy h1 { font-size:clamp(4rem,18vw,6rem); }.section-shell { width:min(100% - 32px,1160px); }.story-section,.events-section { padding:85px 0; }.people-editorial { grid-template-columns:1fr; margin-top:55px; }.person-editorial { min-height:185px; }.portrait-oval { width:90px; height:128px; }.artwork-lockup { margin-top:75px; }.events-heading { display:block; }.events-heading>p { margin-top:22px; }.event-row { grid-template-columns:28px 1fr; gap:12px; }.event-row .map-preview { grid-column:2; width:100%; }.event-main h3 { font-size:23px; }.event-facts { margin-left:0; flex-direction:column; gap:8px; }.event-number { font-size:16px; } }
 @media(prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms!important; animation-iteration-count:1!important; scroll-behavior:auto!important; transition-duration:.01ms!important; } }
+
+/* ═══════════════════════════════════════
+   Scroll Reveal Animation System
+   ═══════════════════════════════════════ */
+[data-reveal]:not(.person-editorial) {
+  opacity: 0;
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+[data-reveal="fade-up"]     { transform: translateY(45px); }
+[data-reveal="slide-left"]  { transform: translateX(-55px); }
+[data-reveal="slide-right"] { transform: translateX(55px); }
+[data-reveal="scale-up"]    { transform: scale(0.92); }
+[data-reveal].is-revealed,
+[data-reveal][data-revealed],
+[data-revealed],
+.is-revealed,
+.person-editorial,
+.person-editorial.is-open {
+  opacity: 1 !important;
+  transform: none !important;
+  visibility: visible !important;
+}
+
+/* ═══════════════════════════════════════
+   Wedding Day Celebration Banner
+   ═══════════════════════════════════════ */
+.wedding-day-banner {
+  position: relative;
+  overflow: hidden;
+  padding: 52px 20px;
+  background: linear-gradient(135deg, #563762 0%, #8b5e6b 28%, #c9956b 52%, #e8c170 73%, #f0d68a 100%);
+  color: #fff;
+  text-align: center;
+  isolation: isolate;
+}
+.banner-shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 38%,
+    rgba(255,255,255,0.12) 43%,
+    rgba(255,255,255,0.28) 50%,
+    rgba(255,255,255,0.12) 57%,
+    transparent 62%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3.5s ease-in-out infinite;
+  z-index: 0;
+}
+.banner-content {
+  position: relative;
+  z-index: 2;
+}
+.banner-kicker {
+  color: #ffecd2;
+  font-size: 11px;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+}
+.banner-title {
+  margin: 16px 0 18px;
+  font: 500 clamp(2.5rem, 7vw, 4.5rem)/1 'Playfair Display', serif;
+  letter-spacing: -0.04em;
+  text-shadow: 0 2px 25px rgba(86, 55, 98, 0.3);
+}
+.banner-message {
+  max-width: 500px;
+  margin: 0 auto;
+  color: #fff5e6;
+  font-size: 14px;
+  line-height: 1.85;
+}
+.banner-floating-hearts {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+.floating-heart {
+  position: absolute;
+  bottom: -30px;
+  width: 18px;
+  height: 18px;
+  color: rgba(255, 220, 200, 0.4);
+  fill: rgba(255, 220, 200, 0.3);
+  animation: float-up var(--duration, 6s) var(--float-delay, 0s) ease-in infinite;
+}
+.floating-heart:nth-child(1) { left: 5%;  --duration: 7s;   --float-delay: 0s; }
+.floating-heart:nth-child(2) { left: 15%; --duration: 5.5s; --float-delay: 1.2s; }
+.floating-heart:nth-child(3) { left: 28%; --duration: 8s;   --float-delay: 0.5s; }
+.floating-heart:nth-child(4) { left: 42%; --duration: 6s;   --float-delay: 2s; }
+.floating-heart:nth-child(5) { left: 55%; --duration: 7.5s; --float-delay: 0.8s; }
+.floating-heart:nth-child(6) { left: 68%; --duration: 5s;   --float-delay: 1.5s; }
+.floating-heart:nth-child(7) { left: 80%; --duration: 6.5s; --float-delay: 0.3s; }
+.floating-heart:nth-child(8) { left: 92%; --duration: 7s;   --float-delay: 1.8s; }
+
+/* ═══════════════════════════════════════
+   Hero Floating Sparkle Particles
+   ═══════════════════════════════════════ */
+.hero-particles {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+.particle {
+  position: absolute;
+  display: block;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(255, 220, 235, 0.5);
+  animation: particle-drift var(--p-duration, 8s) var(--p-delay, 0s) ease-in-out infinite;
+}
+.particle:nth-child(1)  { left: 8%;  top: 70%; --p-duration: 9s;   --p-delay: 0s; }
+.particle:nth-child(2)  { left: 15%; top: 85%; --p-duration: 7s;   --p-delay: 1s;   width: 4px; height: 4px; }
+.particle:nth-child(3)  { left: 22%; top: 60%; --p-duration: 11s;  --p-delay: 2s; }
+.particle:nth-child(4)  { left: 35%; top: 75%; --p-duration: 8s;   --p-delay: 0.5s; width: 2px; height: 2px; }
+.particle:nth-child(5)  { left: 42%; top: 90%; --p-duration: 10s;  --p-delay: 1.5s; }
+.particle:nth-child(6)  { left: 55%; top: 65%; --p-duration: 7.5s; --p-delay: 3s;   width: 4px; height: 4px; }
+.particle:nth-child(7)  { left: 62%; top: 80%; --p-duration: 9.5s; --p-delay: 0.8s; }
+.particle:nth-child(8)  { left: 70%; top: 72%; --p-duration: 8.5s; --p-delay: 2.2s; width: 2px; height: 2px; }
+.particle:nth-child(9)  { left: 78%; top: 88%; --p-duration: 11s;  --p-delay: 1.3s; }
+.particle:nth-child(10) { left: 85%; top: 63%; --p-duration: 7s;   --p-delay: 0.2s; }
+.particle:nth-child(11) { left: 92%; top: 77%; --p-duration: 9s;   --p-delay: 2.8s; }
+.particle:nth-child(12) { left: 18%; top: 55%; --p-duration: 10s;  --p-delay: 1.7s; width: 2px; height: 2px; }
+.particle:nth-child(13) { left: 48%; top: 68%; --p-duration: 8s;   --p-delay: 3.2s; }
+.particle:nth-child(14) { left: 73%; top: 82%; --p-duration: 9.5s; --p-delay: 0.6s; width: 4px; height: 4px; }
+.particle:nth-child(15) { left: 30%; top: 92%; --p-duration: 7.5s; --p-delay: 2.5s; }
+
+/* ═══════════════════════════════════════
+   UX Polish — Countdown & Timeline States
+   ═══════════════════════════════════════ */
+.countdown-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  margin-bottom: 10px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #fffafc;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.countdown-sub {
+  color: #eed5e5;
+  font-size: 11px;
+  letter-spacing: .06em;
+  margin-top: 10px;
+}
+.countdown-message-box {
+  padding: 18px 22px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 14px;
+  backdrop-filter: blur(12px);
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  animation: rise-in 0.6s ease-out;
+}
+.countdown-message-title {
+  color: #fff;
+  font: 500 clamp(1.2rem, 3vw, 1.45rem)/1.3 'Playfair Display', serif;
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+.countdown-message-sub {
+  color: #f3dceb;
+  font-size: 12px;
+  line-height: 1.65;
+  margin-bottom: 14px;
+}
+.countdown-cta-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #fff;
+  color: #563762;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-decoration: none;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+}
+.countdown-cta-link:hover {
+  transform: translateY(-2px);
+  background: #fdf5f9;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.22);
+}
+.countdown-cta-link svg {
+  width: 13px;
+  height: 13px;
+}
+.countdown-today p {
+  font-size: 15px !important;
+  letter-spacing: .15em !important;
+  color: #fff !important;
+  animation: gentle-pulse 2s ease-in-out infinite;
+}
+.countdown-after p {
+  font-size: 15px !important;
+  letter-spacing: .15em !important;
+  color: #f5dfeb !important;
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+}
+
+/* ═══════════════════════════════════════
+   UX Polish — Event Row Hover & Heart
+   ═══════════════════════════════════════ */
+.event-row {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.35s ease;
+}
+.event-row:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 35px rgba(82, 46, 73, 0.1);
+}
+.footer-heart {
+  animation: heart-pulse 2.5s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════
+   New Keyframe Animations
+   ═══════════════════════════════════════ */
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+@keyframes float-up {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 0.6; }
+  100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+}
+@keyframes particle-drift {
+  0%, 100% { transform: translate(0, 0);       opacity: 0.3; }
+  25%      { transform: translate(10px, -30px); opacity: 0.7; }
+  50%      { transform: translate(-5px, -60px); opacity: 0.4; }
+  75%      { transform: translate(15px, -40px); opacity: 0.8; }
+}
+@keyframes gentle-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.65; }
+}
+@keyframes heart-pulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.18); }
+}
+
+/* ═══════════════════════════════════════
+   Calendar Integration Section
+   ═══════════════════════════════════════ */
+.calendar-section {
+  padding: 85px 0 95px;
+  background: linear-gradient(180deg, #eee1e8 0%, #e7d5df 100%);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.calendar-card {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 42px 32px;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 24px;
+  box-shadow: 0 20px 50px rgba(82, 46, 73, 0.08);
+}
+.calendar-card h2 {
+  margin: 14px 0 12px;
+  color: #4d3850;
+  font: 500 clamp(2.2rem, 5vw, 3.4rem)/1 'Playfair Display', serif;
+  letter-spacing: -0.04em;
+}
+.calendar-card h2 em {
+  color: #a47591;
+  font-style: italic;
+}
+.calendar-card p.calendar-desc {
+  max-width: 480px;
+  margin: 0 auto 26px;
+  color: #796677;
+  font-size: 13px;
+  line-height: 1.8;
+}
+.calendar-button-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+.btn-calendar-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 14px 28px;
+  background: linear-gradient(145deg, #6b4372, #50305a);
+  color: #fff;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  box-shadow: 0 8px 24px rgba(80, 48, 90, 0.28);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, background 0.3s ease;
+  cursor: pointer;
+  border: none;
+}
+.btn-calendar-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(80, 48, 90, 0.36);
+  background: linear-gradient(145deg, #784c80, #5c3768);
+}
+.btn-calendar-primary svg {
+  width: 17px;
+  height: 17px;
+}
+.btn-calendar-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 22px;
+  background: rgba(255, 255, 255, 0.85);
+  color: #5d3d63;
+  border: 1px solid rgba(164, 117, 145, 0.3);
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .03em;
+  text-decoration: none;
+  transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+  cursor: pointer;
+}
+.btn-calendar-secondary:hover {
+  transform: translateY(-2px);
+  background: #fff;
+  border-color: #a47591;
+  color: #432249;
+}
+.btn-calendar-secondary svg {
+  width: 15px;
+  height: 15px;
+}
+.calendar-feedback {
+  margin-top: 14px;
+  color: #6a406c;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  animation: rise-in 0.3s ease-out;
+}
+.calendar-note {
+  margin-top: 16px;
+  color: #988295;
+  font-size: 11px;
+  letter-spacing: .05em;
+}
+
+/* ═══════════════════════════════════════
+   Reduced Motion — Reveal Overrides
+   ═══════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .hero-particles,
+  .banner-floating-hearts {
+    display: none;
+  }
+}
