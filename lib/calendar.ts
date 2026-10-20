@@ -6,8 +6,8 @@ import {
 } from '@/constants/wedding'
 
 /**
- * Detects whether the current device is an Apple device (Mac, iPhone, iPad)
- * which supports native .ics calendar import with one tap/click.
+ * Detects whether the current device is an Apple device (Mac, iPhone, iPad, iPod)
+ * which supports native .ics calendar import with one tap.
  */
 export function isAppleDevice(): boolean {
   if (typeof window === 'undefined') return false
@@ -25,9 +25,9 @@ function toIcsUtc(date: Date): string {
 
 /**
  * Generates an RFC 5545 compliant iCalendar string containing ALL 3 wedding events:
- * 1. Wedding Ceremony (Holy Trinity Cathedral)
- * 2. Wedding Reception (Moon Mahal)
- * 3. Reception Gathering (JD Grand Hall Nazareth)
+ * 1. Wedding Ceremony (Friday, 04 December 2026 at Holy Trinity Cathedral)
+ * 2. Wedding Reception (Friday, 04 December 2026 at Moon Mahal)
+ * 3. Reception Gathering (Saturday, 05 December 2026 at JD Grand Hall Nazareth)
  */
 export function generateWeddingIcs(): string {
   const nowUtc = toIcsUtc(new Date())
@@ -35,11 +35,11 @@ export function generateWeddingIcs(): string {
   const ceremonyStart = toIcsUtc(new Date(CEREMONY_DATETIME))
   const ceremonyEnd = toIcsUtc(new Date(CEREMONY_END_DATETIME))
 
-  // Afternoon reception starts when ceremony concludes (11:30 AM)
+  // Afternoon reception starts when ceremony concludes (11:30 AM - 2:30 PM)
   const receptionStart = toIcsUtc(new Date(CEREMONY_END_DATETIME))
   const receptionEnd = toIcsUtc(new Date(RECEPTION_END_DATETIME))
 
-  // Evening gathering on next day (6:30 PM - 9:30 PM)
+  // Evening gathering on Saturday, 5 December (6:30 PM - 9:30 PM)
   const gatheringStart = toIcsUtc(new Date(GATHERING_DATETIME))
   const gatheringEndObj = new Date(GATHERING_DATETIME)
   gatheringEndObj.setHours(gatheringEndObj.getHours() + 3)
@@ -48,7 +48,7 @@ export function generateWeddingIcs(): string {
   const lines = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//Jaffrin & Shifforah Wedding//EN',
+    'PRODID:-//Jaffrin and Shifforah//Wedding Invitation//EN',
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
     'X-WR-CALNAME:Jaffrin & Shifforah Wedding Celebrations',
@@ -56,13 +56,14 @@ export function generateWeddingIcs(): string {
 
     // Event 1: Wedding Ceremony
     'BEGIN:VEVENT',
-    `UID:wedding-ceremony-${Date.now()}-1@jaffrin-shifforah.wedding`,
+    'UID:wedding-ceremony-20261204@jaffrin-shifforah.wedding',
     `DTSTAMP:${nowUtc}`,
     `DTSTART:${ceremonyStart}`,
     `DTEND:${ceremonyEnd}`,
-    `SUMMARY:Wedding Ceremony — Jaffrin & Shifforah`,
-    `DESCRIPTION:Holy Matrimony of S. Jaffrin Sampaul and P. Shifforah Rajam.\\nVenue: Holy Trinity Cathedral, Palayamkottai.\\nDirections: https://maps.app.goo.gl/iRxFvW8CazVdvKoR6`,
-    `LOCATION:Holy Trinity Cathedral, Palayamkottai`,
+    'SUMMARY:Wedding Ceremony — Jaffrin & Shifforah',
+    'DESCRIPTION:Holy Matrimony of S. Jaffrin Sampaul & P. Shifforah Rajam.\\nVenue: Holy Trinity Cathedral, Palayamkottai.\\nDirections: https://maps.app.goo.gl/iRxFvW8CazVdvKoR6',
+    'LOCATION:Holy Trinity Cathedral, Palayamkottai',
+    'URL:https://maps.app.goo.gl/iRxFvW8CazVdvKoR6',
     'STATUS:CONFIRMED',
     'BEGIN:VALARM',
     'TRIGGER:-PT2H',
@@ -73,13 +74,14 @@ export function generateWeddingIcs(): string {
 
     // Event 2: Wedding Reception
     'BEGIN:VEVENT',
-    `UID:wedding-reception-${Date.now()}-2@jaffrin-shifforah.wedding`,
+    'UID:wedding-reception-20261204@jaffrin-shifforah.wedding',
     `DTSTAMP:${nowUtc}`,
     `DTSTART:${receptionStart}`,
     `DTEND:${receptionEnd}`,
-    `SUMMARY:Wedding Reception — Jaffrin & Shifforah`,
-    `DESCRIPTION:Wedding Reception celebrating the newlyweds Jaffrin & Shifforah.\\nVenue: Moon Mahal, Pothigai Nagar, Perumalpuram.\\nDirections: https://maps.app.goo.gl/woapsnZSxm61oYsd8`,
-    `LOCATION:Moon Mahal, Pothigai Nagar, Perumalpuram`,
+    'SUMMARY:Wedding Reception — Jaffrin & Shifforah',
+    'DESCRIPTION:Wedding Reception celebrating the newlyweds Jaffrin & Shifforah.\\nVenue: Moon Mahal, Pothigai Nagar, Perumalpuram.\\nDirections: https://maps.app.goo.gl/woapsnZSxm61oYsd8',
+    'LOCATION:Moon Mahal, Pothigai Nagar, Perumalpuram',
+    'URL:https://maps.app.goo.gl/woapsnZSxm61oYsd8',
     'STATUS:CONFIRMED',
     'BEGIN:VALARM',
     'TRIGGER:-PT1H',
@@ -90,13 +92,14 @@ export function generateWeddingIcs(): string {
 
     // Event 3: Reception Gathering
     'BEGIN:VEVENT',
-    `UID:wedding-gathering-${Date.now()}-3@jaffrin-shifforah.wedding`,
+    'UID:wedding-gathering-20261205@jaffrin-shifforah.wedding',
     `DTSTAMP:${nowUtc}`,
     `DTSTART:${gatheringStart}`,
     `DTEND:${gatheringEnd}`,
-    `SUMMARY:Reception Gathering — Jaffrin & Shifforah`,
-    `DESCRIPTION:Continued celebration and evening reception gathering for Jaffrin & Shifforah.\\nVenue: JD Grand Hall Nazareth.\\nDirections: https://maps.app.goo.gl/3jPmWYQJ4yqT9J1SA`,
-    `LOCATION:JD Grand Hall Nazareth, Nazareth`,
+    'SUMMARY:Reception Gathering — Jaffrin & Shifforah',
+    'DESCRIPTION:Continued celebration and evening reception gathering for Jaffrin & Shifforah.\\nVenue: JD Grand Hall Nazareth.\\nDirections: https://maps.app.goo.gl/3jPmWYQJ4yqT9J1SA',
+    'LOCATION:JD Grand Hall Nazareth, Nazareth',
+    'URL:https://maps.app.goo.gl/3jPmWYQJ4yqT9J1SA',
     'STATUS:CONFIRMED',
     'BEGIN:VALARM',
     'TRIGGER:-PT2H',
@@ -112,20 +115,17 @@ export function generateWeddingIcs(): string {
 }
 
 /**
- * Downloads the multi-event .ics file which Apple Calendar, Outlook, and Google Calendar
- * can open to import all 3 events at once.
+ * Endpoint URL for the multi-event .ics file.
+ * iOS Safari natively recognizes this HTTP endpoint and launches the native Apple Calendar
+ * sheet ("Add All (3 Events)").
  */
-export function downloadIcsFile(): void {
-  const icsData = generateWeddingIcs()
-  const blob = new Blob([icsData], { type: 'text/calendar;charset=utf-8' })
-  const url = URL.createObjectURL(blob)
-  const link = document.createElement('a')
-  link.href = url
-  link.setAttribute('download', 'jaffrin-and-shifforah-wedding.ics')
-  document.body.appendChild(link)
-  link.click()
-  document.body.removeChild(link)
-  URL.revokeObjectURL(url)
+export const APPLE_CALENDAR_ICS_URL = '/api/calendar'
+
+/**
+ * Directly opens or downloads the Apple Calendar (.ics) file via the server route.
+ */
+export function openAppleCalendar(): void {
+  window.location.href = APPLE_CALENDAR_ICS_URL
 }
 
 /**
@@ -166,28 +166,4 @@ export function getGoogleCalendarUrl(): string {
   })
 
   return `https://calendar.google.com/calendar/render?${params.toString()}`
-}
-
-/**
- * Smart handler: Dispatches to Apple Calendar (.ics download with all 3 events)
- * if on an Apple device, or opens Google Calendar in a new tab if on other devices.
- */
-export function addWeddingToCalendar(): {
-  deviceType: 'apple' | 'google'
-  label: string
-} {
-  if (isAppleDevice()) {
-    downloadIcsFile()
-    return {
-      deviceType: 'apple',
-      label: 'Added to Apple Calendar (All 3 events)',
-    }
-  } else {
-    const url = getGoogleCalendarUrl()
-    window.open(url, '_blank', 'noopener,noreferrer')
-    return {
-      deviceType: 'google',
-      label: 'Opened in Google Calendar',
-    }
-  }
 }

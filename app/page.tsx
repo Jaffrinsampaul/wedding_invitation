@@ -40,9 +40,8 @@ import {
 } from '@/constants/wedding'
 import {
   isAppleDevice,
-  downloadIcsFile,
+  APPLE_CALENDAR_ICS_URL,
   getGoogleCalendarUrl,
-  addWeddingToCalendar,
 } from '@/lib/calendar'
 
 const ICON_MAP: Record<string, LucideIcon> = {
@@ -134,21 +133,13 @@ export default function Page() {
     }))
   }
 
-  const handleSmartCalendar = () => {
-    const res = addWeddingToCalendar()
-    setCalendarStatus(res.label)
+  const handleAppleCalendarClick = () => {
+    setCalendarStatus('Opening Apple Calendar with all 3 events...')
     setTimeout(() => setCalendarStatus(null), 5000)
   }
 
-  const handleAppleCalendar = () => {
-    downloadIcsFile()
-    setCalendarStatus('Downloaded Apple Calendar (.ics) file with all 3 events')
-    setTimeout(() => setCalendarStatus(null), 5000)
-  }
-
-  const handleGoogleCalendar = () => {
-    window.open(getGoogleCalendarUrl(), '_blank', 'noopener,noreferrer')
-    setCalendarStatus('Opened Google Calendar in a new tab')
+  const handleGoogleCalendarClick = () => {
+    setCalendarStatus('Opening Google Calendar...')
     setTimeout(() => setCalendarStatus(null), 5000)
   }
 
@@ -409,35 +400,39 @@ export default function Page() {
             <p className="calendar-desc">{CALENDAR_CONTENT.description}</p>
 
             <div className="calendar-button-group">
-              <button
-                type="button"
+              <a
+                href={isApple ? APPLE_CALENDAR_ICS_URL : getGoogleCalendarUrl()}
+                target={isApple ? undefined : '_blank'}
+                rel={isApple ? undefined : 'noopener,noreferrer'}
                 className="btn-calendar-primary"
-                onClick={handleSmartCalendar}
+                onClick={isApple ? handleAppleCalendarClick : handleGoogleCalendarClick}
                 aria-label={isApple ? CALENDAR_CONTENT.appleButtonText : CALENDAR_CONTENT.googleButtonText}
               >
                 <CalendarPlus />
                 {isApple ? CALENDAR_CONTENT.appleButtonText : CALENDAR_CONTENT.smartButtonText}
-              </button>
+              </a>
 
-              <button
-                type="button"
+              <a
+                href={APPLE_CALENDAR_ICS_URL}
                 className="btn-calendar-secondary"
-                onClick={handleAppleCalendar}
-                title="Download .ics file containing all 3 events for Apple Calendar, Outlook, etc."
+                onClick={handleAppleCalendarClick}
+                title="Open or download .ics file containing all 3 events for Apple Calendar, Outlook, etc."
               >
                 <Download />
                 Apple Calendar (.ics)
-              </button>
+              </a>
 
-              <button
-                type="button"
+              <a
+                href={getGoogleCalendarUrl()}
+                target="_blank"
+                rel="noopener,noreferrer"
                 className="btn-calendar-secondary"
-                onClick={handleGoogleCalendar}
+                onClick={handleGoogleCalendarClick}
                 title="Open and save to Google Calendar"
               >
                 <Calendar />
                 Google Calendar
-              </button>
+              </a>
             </div>
 
             {calendarStatus && (
